@@ -35,7 +35,7 @@ app.engine("ejs", ejsMate);
 // Parsing incoming JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(flash());
+
 app.use(methodOverride("_method"));
 
 // Session management setup to handle user sessions, cookies, etc.
@@ -46,7 +46,7 @@ app.use(session({
   cookie: { secure: false }  
 }));
 
-
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -95,8 +95,8 @@ const storage = multer.diskStorage({
 // Connect to MongoDB database
 async function main() {
   try {
-    // await mongoose.connect("mongodb://127.0.0.1:27017/shoes_palace");
-    await mongoose.connect("mongodb+srv://omkale0107:KpQXxecPPRt7WAin@cluster0.9e6ps.mongodb.net/shoes_palace?retryWrites=true&w=majority")
+    await mongoose.connect("mongodb://127.0.0.1:27017/shoes_palace");
+    // await mongoose.connect("mongodb+srv://omkale0107:KpQXxecPPRt7WAin@cluster0.9e6ps.mongodb.net/shoes_palace?retryWrites=true&w=majority")
     console.log("Connected To Database...");
   } catch (err) {
     console.log("Connection error", err);
@@ -135,6 +135,7 @@ app.post("/signup", async (req, res) => {
 
       req.flash("success", "Signup successful! Welcome to our website.");
       res.redirect("/");
+      // req.flash("success", "Signup successful! Welcome to our website.");
     });
   } catch (e) {
     // Handle specific errors, such as user already existing
@@ -148,8 +149,9 @@ app.post("/signup", async (req, res) => {
       req.flash("error", "Something went wrong. Please try again.");
       console.log("Error Found")
     }
-
+    req.flash("error", "Something went wrong. Please try again.");
     res.redirect("/signup");
+    // req.flash("error", "Something went wrong. Please try again.");
   }
 });
 
@@ -173,6 +175,7 @@ app.post(
 
     req.flash("success", "Login successful! Welcome back.");
     res.redirect(redirectUrl);
+    // req.flash("success", "Login successful! Welcome back.");
   }
 );
 
